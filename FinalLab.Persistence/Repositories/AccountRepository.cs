@@ -1,0 +1,39 @@
+﻿using FinalLab.Domain.Entities;
+using FinalLab.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+
+namespace FinalLab.Persistence.Repositories;
+
+public class AccountRepository : IAccountRepository
+{
+    private readonly ApplicationDbContext _db;
+
+    public AccountRepository(ApplicationDbContext db, IQueryable<Account> query)
+    {
+        _db = db;
+        Query = query;
+    }
+
+    public Task<List<Account>> GetAllAsync()
+    {
+        return _db.Accounts.ToListAsync();
+    }
+
+    public IQueryable<Account> Query { get; }
+    public async Task AddAsync(Account entity)
+    {
+        await _db.Accounts.AddAsync(entity);
+        await _db.SaveChangesAsync();
+    }
+
+    public Task DeleteAsync(Account entity)
+    {
+        _db.Accounts.Remove(entity);
+        return _db.SaveChangesAsync();
+    }
+
+    public Task SaveAsync()
+    {
+        return _db.SaveChangesAsync();
+    }
+}
