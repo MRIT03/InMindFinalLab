@@ -1,4 +1,5 @@
-﻿using FinalLab.Application.EventHandlers;
+﻿using System.Reflection;
+using FinalLab.Application.EventHandlers;
 using FinalLab.Application.Services;
 using FinalLab.Domain.Entities;
 using FinalLab.Domain.Events;
@@ -45,6 +46,7 @@ builder.Services.AddScoped<TransactionService>();
 
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(TransactionCreatedEventHandler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 
 builder.Services.AddScoped<INotificationHandler<TransactionCreatedEvent>, TransactionCreatedEventHandler>();

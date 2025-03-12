@@ -3,6 +3,6 @@
 public class Account
 {
     public long AccountId { get; set; }
-    public float Balance { get; set; }
+    public decimal Balance { get; set; }
     
 }
