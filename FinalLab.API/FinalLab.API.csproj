@@ -3,7 +3,28 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
+        <OutputType>exe</OutputType>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
+        <PackageReference Include="Asp.Versioning.OData" Version="8.1.0" />
+        <PackageReference Include="Hangfire" Version="1.8.18" />
+        <PackageReference Include="Hangfire.PostgreSql" Version="1.20.10" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.3.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OData.NewtonsoftJson" Version="8.2.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.2" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\FinalLab.Application\FinalLab.Application.csproj" />
+      <ProjectReference Include="..\FinalLab.Common\FinalLab.Common.csproj" />
+      <ProjectReference Include="..\FinalLab.Domain\FinalLab.Domain.csproj" />
+      <ProjectReference Include="..\FinalLab.Persistence\FinalLab.Persistence.csproj" />
+    </ItemGroup>
 
 </Project>

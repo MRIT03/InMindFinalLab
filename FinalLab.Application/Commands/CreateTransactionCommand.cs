@@ -4,7 +4,7 @@ using Transaction = FinalLab.Domain.Entities.Transaction;
 
 namespace FinalLab.Application.Commands;
 
-public class CreateTransactionCommand : IRequest, IRequest<Transaction>
+public class CreateTransactionCommand : IRequest<Transaction>
 {
     public long AccountId { get; set; }
     public string TransactionType { get; set; }
