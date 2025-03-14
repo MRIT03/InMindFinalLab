@@ -3,6 +3,7 @@ using FinalLab.Application.EventHandlers;
 using FinalLab.Application.Services;
 using FinalLab.Domain.Entities;
 using FinalLab.Domain.Events;
+using FinalLab.Domain.Events.DomainEvents;
 using FinalLab.Infrastructure.Persistence;
 
 using FinalLab.Persistence.Repositories;
@@ -50,7 +51,9 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Get
 
 
 builder.Services.AddScoped<INotificationHandler<TransactionCreatedEvent>, TransactionCreatedEventHandler>();
-
+builder.Services.AddScoped<INotificationHandler<MoneyTransferredEvent>, MoneyTransferredEventHandler>();
+builder.Services.AddScoped<INotificationHandler<AccountCreatedEvent>, AccountCreatedEventHandler>();
+builder.Services.AddScoped<INotificationHandler<AccountModifiedEvent>, AccountModifiedEventHandler>();
 
 var modelBuilder = new ODataConventionModelBuilder();
 modelBuilder.EntitySet<Transaction>("Transactions");

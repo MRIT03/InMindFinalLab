@@ -1,4 +1,5 @@
 ﻿using FinalLab.Domain.Entities;
+using FinalLab.Domain.Events;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinalLab.Infrastructure.Persistence
@@ -12,6 +13,7 @@ namespace FinalLab.Infrastructure.Persistence
 
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<UpdateEvent> UpdateEvents { get; set; } // TPH Table for both Account & Transaction Events
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +38,22 @@ namespace FinalLab.Infrastructure.Persistence
                     .WithMany()
                     .HasForeignKey(t => t.AccountId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<UpdateEvent>(entity =>
+            {
+                entity.HasKey(e => e.EventId);
+                entity.Property(e => e.EventId).ValueGeneratedOnAdd();
+                entity.Property(e => e.oldStatus).HasMaxLength(50);
+                entity.Property(e => e.newStatus).HasMaxLength(50);
+                entity.Property(e => e.oldBalance).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.newBalance).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.timeStamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                // TPH: Discriminator Column
+                entity.HasDiscriminator<string>("EventType")
+                      .HasValue<AccountUpdateEvent>("AccountUpdate")
+                      .HasValue<TransactionUpdateEvent>("TransactionUpdate");
             });
 
             base.OnModelCreating(modelBuilder);
