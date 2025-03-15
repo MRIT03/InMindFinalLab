@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.OData.Query;
 namespace FinalLab.API.Controllers;
 
 [ApiController]
-[Route("/transaction-logs")]
+[Route("transaction-logs")]
 public class TransactionController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
@@ -20,7 +20,7 @@ public class TransactionController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTransactionAsync(Transaction transaction)
+    public async Task<IActionResult> CreateTransactionAsync([FromBody] Transaction transaction)
     {
         var result = await _transactionService.CreateTransactionAsync(transaction);
         return Ok(result);

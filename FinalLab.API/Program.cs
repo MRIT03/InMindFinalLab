@@ -41,7 +41,7 @@ builder.Services.AddSingleton<IConnection>(sp =>
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
-builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(TransactionCreatedEventHandler).Assembly));
@@ -62,5 +62,5 @@ var app = builder.Build();
 app.UseRouting();
 
 app.MapGet("/", () => "Banking System API is Running...");
-
+app.MapControllers();
 app.Run();
