@@ -26,6 +26,8 @@ builder.Services.AddLogging(logging =>
     logging.AddDebug();    // Logs to the debug output
 });
 
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
