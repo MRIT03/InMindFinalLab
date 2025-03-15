@@ -5,6 +5,7 @@ using FinalLab.Domain.Events;
 using FinalLab.Infrastructure.Persistence;
 
 using FinalLab.Persistence.Repositories;
+using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.OData;
@@ -33,10 +34,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // RabbitMQ Connection
-builder.Services.AddSingleton<IConnection>(sp =>
+builder.Services.AddMassTransit(x =>
 {
-    var factory = new ConnectionFactory { HostName = "localhost"};
-    return factory.CreateConnectionAsync().GetAwaiter().GetResult();
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("localhost", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+    });
 });
 
 
