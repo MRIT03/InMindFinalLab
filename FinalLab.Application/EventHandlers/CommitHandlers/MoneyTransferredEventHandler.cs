@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using FinalLab.Domain.Events.DomainEvents;
+using FinalLab.Persistence.UnitsOfWork;
 
 namespace FinalLab.Application.EventHandlers
 {
@@ -37,8 +38,15 @@ namespace FinalLab.Application.EventHandlers
 
             if (notification.IsReverting)
             {
-                receiver.Balance -= notification.Amount;
-                sender.Balance += notification.Amount;
+                //Since we are reverting we swtich the to and from
+                var unitOfWork = new TransferFunds()
+                {
+                    AccountId = notification.ToAccountId,
+                    Amount = notification.Amount,
+                    ToAccountId = notification.FromAccountId,
+
+                };
+                await unitOfWork.commit();
 
                 _logger.LogWarning("Money transfer REVERTED: From {From} to {To} - Amount: {Amount}",
                     notification.FromAccountId, notification.ToAccountId, notification.Amount);

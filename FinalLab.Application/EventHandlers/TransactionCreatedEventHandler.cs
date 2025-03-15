@@ -18,7 +18,7 @@ namespace FinalLab.Application.EventHandlers
             using var channel = await connection.CreateChannelAsync();
 
             await channel.ExchangeDeclareAsync(
-                exchange: "Transactions",
+                exchange: "_TransactionRepository",
                 type: ExchangeType.Fanout,
                 durable: true,        
                 autoDelete: false,
@@ -27,7 +27,7 @@ namespace FinalLab.Application.EventHandlers
             var message = JsonSerializer.Serialize(notification);
             var body = Encoding.UTF8.GetBytes(message);
 
-            channel.BasicPublishAsync(exchange: "Transactions",
+            channel.BasicPublishAsync(exchange: "_TransactionRepository",
                 routingKey: "",
                 
                 body: body);

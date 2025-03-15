@@ -56,7 +56,7 @@ builder.Services.AddScoped<INotificationHandler<AccountCreatedEvent>, AccountCre
 builder.Services.AddScoped<INotificationHandler<AccountModifiedEvent>, AccountModifiedEventHandler>();
 
 var modelBuilder = new ODataConventionModelBuilder();
-modelBuilder.EntitySet<Transaction>("Transactions");
+modelBuilder.EntitySet<Transaction>("_TransactionRepository");
 
 builder.Services.AddControllers().AddOData(options =>
     options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(100).AddRouteComponents("odata", modelBuilder.GetEdmModel()));
