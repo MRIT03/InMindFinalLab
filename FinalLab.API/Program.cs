@@ -6,6 +6,7 @@ using FinalLab.Domain.Events;
 using FinalLab.Infrastructure.Persistence;
 
 using FinalLab.Persistence.Repositories;
+using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.OData;
@@ -27,22 +28,30 @@ builder.Services.AddLogging(logging =>
     logging.AddDebug();    // Logs to the debug output
 });
 
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // RabbitMQ Connection
-builder.Services.AddSingleton<IConnection>(sp =>
+builder.Services.AddMassTransit(x =>
 {
-    var factory = new ConnectionFactory { HostName = "localhost"};
-    return factory.CreateConnectionAsync().GetAwaiter().GetResult();
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("localhost", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+    });
 });
 
 
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
-builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(TransactionCreatedEventHandler).Assembly));
@@ -64,5 +73,5 @@ var app = builder.Build();
 app.UseRouting();
 
 app.MapGet("/", () => "Banking System API is Running...");
-
+app.MapControllers();
 app.Run();

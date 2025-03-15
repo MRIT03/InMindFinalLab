@@ -11,7 +11,7 @@ public class AccountRepository : IAccountRepository
     public AccountRepository(ApplicationDbContext db, IQueryable<Account> query)
     {
         _db = db;
-        Query = query;
+        Query = _db.Accounts;
     }
 
     public Task<List<Account>> GetAllAsync()
