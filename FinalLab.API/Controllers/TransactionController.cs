@@ -26,7 +26,7 @@ public class TransactionController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("/{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetTransactionsAsync([FromRoute] int id)
     {
         var transactions = await _transactionRepository.GetAllAsync();
