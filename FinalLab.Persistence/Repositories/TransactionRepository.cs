@@ -8,10 +8,10 @@ public class TransactionRepository : ITransactionRepository
 {
     private readonly ApplicationDbContext _db;
 
-    public TransactionRepository(ApplicationDbContext db, IQueryable<Transaction> query)
+    public TransactionRepository(ApplicationDbContext db)
     {
         _db = db;
-        Query = query;
+        Query = _db.Transactions;
     }
 
 

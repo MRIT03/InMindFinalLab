@@ -8,10 +8,10 @@ public class AccountRepository : IAccountRepository
 {
     private readonly ApplicationDbContext _db;
 
-    public AccountRepository(ApplicationDbContext db, IQueryable<Account> query)
+    public AccountRepository(ApplicationDbContext db)
     {
         _db = db;
-        Query = query;
+        Query = _db.Accounts;
     }
 
     public Task<List<Account>> GetAllAsync()
