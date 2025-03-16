@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
+using FinalLab.Domain.Entities.Events.UpdateEvents;
 using FinalLab.Domain.Events.DomainEvents;
 
 namespace FinalLab.Application.EventHandlers

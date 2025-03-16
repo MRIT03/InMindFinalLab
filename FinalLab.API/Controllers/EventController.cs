@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FinalLab.API.Dtos;
+using FinalLab.Domain.Entities.Events.UpdateEvents;
 using FinalLab.Domain.Events.DomainEvents;
 
 namespace FinalLab.API.Controllers
