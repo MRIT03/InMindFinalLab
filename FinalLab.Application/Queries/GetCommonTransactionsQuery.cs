@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FinalLab.Application.Queries
 {
-    public class GetCommonTransactionsQuery : IRequest<List<Transaction>>
+    public class GetCommonTransactionsQuery : IRequest<List<List<Transaction>>>
     {
         public List<long> AccountIds { get; }
 
