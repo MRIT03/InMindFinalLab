@@ -7,4 +7,8 @@
         
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\FinalLab.Domain\FinalLab.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -10,7 +10,10 @@ public class Transaction
         public decimal Amount { get;  set; }
         public DateTime Timestamp { get;  set; }
         public string Status { get; set; } 
-        public string Details { get;  set; } 
+        public string Details { get;  set; }
 
-        
+        public Transaction()
+        {
+                
+        }
 }

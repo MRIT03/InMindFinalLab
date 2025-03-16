@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FinalLab.API.Dtos;
+using FinalLab.Domain.Entities.Events.UpdateEvents;
 using FinalLab.Domain.Events.DomainEvents;
 
 namespace FinalLab.API.Controllers
@@ -42,15 +43,15 @@ namespace FinalLab.API.Controllers
             switch (request.EventType.ToLower())
             {
                 case "moneytransferred":
-                    eventToDispatch = new MoneyTransferredEvent(request.FromAccountId, request.ToAccountId, request.Amount, false);
+                    eventToDispatch = new MoneyTransferredEvent(request.FromAccountId, request.ToAccountId, request.Amount, request.isReverted);
                     break;
 
                 case "accountcreated":
-                    eventToDispatch = new AccountCreatedEvent(request.AccountId, false);
+                    eventToDispatch = new AccountCreatedEvent(request.isReverted);
                     break;
 
                 case "accountmodified":
-                    eventToDispatch = new AccountModifiedEvent(request.AccountId, request.OldStatus, request.NewStatus, false);
+                    eventToDispatch = new AccountModifiedEvent(request.AccountId, request.OldStatus, request.NewStatus, request.isReverted);
                     break;
 
                 default:
@@ -70,7 +71,7 @@ namespace FinalLab.API.Controllers
         [HttpGet("{transactionId}")]
         public async Task<IActionResult> GetEventsByTransaction(long transactionId)
         {
-            var events = await _context.UpdateEvents
+            var events = await _context.Events
                 .Where(e => (e is TransactionUpdateEvent) && ((TransactionUpdateEvent)e).TransactionId == transactionId)
                 .ToListAsync();
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FinalLab.API.Controllers
 {
-    [Route("/accounts/")]
+    [Route("accounts/")]
     [ApiController]
     public class AccountController : ControllerBase
     {

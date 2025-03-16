@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FinalLab.Application.Services
 {
-    public class TransactionService
+    public class TransactionService : ITransactionService
     {
         private readonly IMediator _mediator;
         private readonly ILogger<TransactionService> _logger;

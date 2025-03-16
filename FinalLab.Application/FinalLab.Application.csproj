@@ -7,13 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0-develop.2236" />
       <PackageReference Include="MediatR" Version="12.4.1" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="RabbitMQ.Client" Version="7.1.1" />
+        <ProjectReference Include="..\FinalLab.Common\FinalLab.Common.csproj" />
       <ProjectReference Include="..\FinalLab.Domain\FinalLab.Domain.csproj" />
+      <ProjectReference Include="..\FinalLab.Infrastructure\FinalLab.Infrastructure.csproj" />
       <ProjectReference Include="..\FinalLab.Persistence\FinalLab.Persistence.csproj" />
     </ItemGroup>
 

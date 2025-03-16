@@ -8,10 +8,10 @@ public class TransactionRepository : ITransactionRepository
 {
     private readonly ApplicationDbContext _db;
 
-    public TransactionRepository(ApplicationDbContext db, IQueryable<Transaction> query)
+    public TransactionRepository(ApplicationDbContext db)
     {
         _db = db;
-        Query = query;
+        Query = _db.Transactions;
     }
 
 
@@ -26,7 +26,7 @@ public class TransactionRepository : ITransactionRepository
         await _db.Transactions.AddAsync(entity);
     }
 
-    public async Task DeleteAsync(Transaction entity)
+    public void DeleteAsync(Transaction entity)
     {
         _db.Transactions.Remove(entity);
     }

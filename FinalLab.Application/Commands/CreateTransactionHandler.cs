@@ -9,6 +9,11 @@ public class CreateTransactionHandler : IRequestHandler<CreateTransactionCommand
 {
     private readonly ITransactionRepository _transactionRepository;
 
+    public CreateTransactionHandler(ITransactionRepository transactionRepository)
+    {
+        _transactionRepository = transactionRepository;
+    }
+
 
     public async Task<Transaction> Handle(CreateTransactionCommand request, CancellationToken cancellationToken)
     {
@@ -20,6 +25,7 @@ public class CreateTransactionHandler : IRequestHandler<CreateTransactionCommand
             Details = request.Details,
             Status = request.status
         };
+        
         await _transactionRepository.AddAsync(entity);
         return entity;
     }
