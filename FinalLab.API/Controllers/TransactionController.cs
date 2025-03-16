@@ -3,6 +3,7 @@ using FinalLab.Domain.Entities;
 using FinalLab.Persistence.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.Extensions.Localization;
 
 namespace FinalLab.API.Controllers;
 
@@ -12,11 +13,14 @@ public class TransactionController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
     private readonly ITransactionRepository _transactionRepository;
+    private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-    public TransactionController(ITransactionService transactionService, ITransactionRepository transactionRepository)
+
+    public TransactionController(ITransactionService transactionService, ITransactionRepository transactionRepository, IStringLocalizer<SharedResource> sharedLocalizer)
     {
         _transactionService = transactionService;
         _transactionRepository = transactionRepository;
+        _sharedLocalizer = sharedLocalizer;
     }
 
     [HttpPost]
@@ -39,6 +43,17 @@ public class TransactionController : ControllerBase
     {
         var transactions = await _transactionRepository.GetAllAsync();
         return transactions.AsQueryable();
+    }
+
+    [HttpPost("/transactions/notify")]
+    public async Task<IActionResult> Notify([FromBody] string message)
+    {
+        Transaction transaction = new Transaction()
+        {
+            Status = "notified",
+            Details = _sharedLocalizer[message],
+        };
+        return Ok(_transactionService.CreateTransactionAsync(transaction));
     }
     
     
