@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-namespace FinalLab.Microservices.Logger.Entities;
+namespace FinalLab.Domain.Entities;
 public class LogEntry
 {
     public long Id { get; set; }
@@ -12,6 +11,8 @@ public class LogEntry
     [Column(TypeName = "jsonb")]
     public string RequestObject { get; set; }
     public string RouteURL { get; set; }
+    [Column(TypeName = "timestamp with time zone")]
+
     public DateTime Timestamp { get; set; }
     
     [NotMapped]

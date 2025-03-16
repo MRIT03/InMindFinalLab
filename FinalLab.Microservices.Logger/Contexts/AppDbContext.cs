@@ -1,4 +1,4 @@
-﻿using FinalLab.Microservices.Logger.Entities;
+﻿using FinalLab.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -11,7 +11,7 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost;Database=LibraryLoggingDb;Username=postgres;Password=postgres");
+        optionsBuilder.UseNpgsql("Host=localhost;Database=BankLoggingDb;Username=postgres;Password=postgres");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

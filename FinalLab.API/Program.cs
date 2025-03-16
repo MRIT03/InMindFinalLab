@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using FinalLab.API.Middleware;
 using FinalLab.Application.EventHandlers;
 using FinalLab.Application.Services;
 using FinalLab.Domain.Entities;
@@ -44,9 +45,20 @@ builder.Services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
+
+        // Configure the exchange name for LogEntryCreatedEvent to "logging"
+        cfg.Message<LogEntryCreatedEvent>(config =>
+        {
+            config.SetEntityName("logging");
+        });
+
+        // Ensure published messages use a fanout exchange
+        cfg.Publish<LogEntryCreatedEvent>(p =>
+        {
+            p.ExchangeType = "fanout";
+        });
     });
 });
-
 
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
@@ -69,7 +81,7 @@ builder.Services.AddControllers().AddOData(options =>
 
 
 var app = builder.Build();
-
+app.UseRequestLogging();
 app.UseRouting();
 
 app.MapGet("/", () => "Banking System API is Running...");

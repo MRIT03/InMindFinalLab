@@ -22,7 +22,7 @@ namespace FinalLab.Microservices.Logger.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("FinalLab.Microservices.Logger.Entities.LogEntry", b =>
+            modelBuilder.Entity("FinalLab.Domain.Entities.LogEntry", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

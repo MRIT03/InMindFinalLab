@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FinalLab.Domain.Entities;
 using FinalLab.Microservices.Logger.Contexts;
-using FinalLab.Microservices.Logger.Entities;
 using Newtonsoft.Json;
 
 [ApiController]
