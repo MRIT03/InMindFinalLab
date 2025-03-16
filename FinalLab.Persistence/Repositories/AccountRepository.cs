@@ -8,7 +8,7 @@ public class AccountRepository : IAccountRepository
 {
     private readonly ApplicationDbContext _db;
 
-    public AccountRepository(ApplicationDbContext db, IQueryable<Account> query)
+    public AccountRepository(ApplicationDbContext db)
     {
         _db = db;
         Query = _db.Accounts;
@@ -23,13 +23,11 @@ public class AccountRepository : IAccountRepository
     public async Task AddAsync(Account entity)
     {
         await _db.Accounts.AddAsync(entity);
-        await _db.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(Account entity)
+    public void DeleteAsync(Account entity)
     {
         _db.Accounts.Remove(entity);
-        return _db.SaveChangesAsync();
     }
 
     public Task SaveAsync()

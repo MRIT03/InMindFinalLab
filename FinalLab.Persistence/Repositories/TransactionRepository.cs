@@ -24,13 +24,11 @@ public class TransactionRepository : ITransactionRepository
     public async Task AddAsync(Transaction entity)
     {
         await _db.Transactions.AddAsync(entity);
-        await _db.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Transaction entity)
+    public void DeleteAsync(Transaction entity)
     {
         _db.Transactions.Remove(entity);
-        await _db.SaveChangesAsync();
     }
 
     public Task SaveAsync()

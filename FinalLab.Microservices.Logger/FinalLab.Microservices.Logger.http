@@ -1,0 +1,6 @@
+@FinalLab.Microservices.Logger_HostAddress = http://localhost:5074
+
+GET {{FinalLab.Microservices.Logger_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
