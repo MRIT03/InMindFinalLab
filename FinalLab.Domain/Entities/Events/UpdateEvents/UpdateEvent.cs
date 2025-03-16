@@ -6,10 +6,10 @@
 public class UpdateEvent
 { 
     public int EventId { get; set; }
-    public string OldStatus { get; set; }
-    public string NewStatus { get; set; }
-    public decimal OldBalance { get; set; }
-    public decimal NewBalance { get; set; }
+    public string? OldStatus { get; set; }
+    public string? NewStatus { get; set; }
+    public decimal? OldBalance { get; set; }
+    public decimal? NewBalance { get; set; }
     public DateTime Timestamp { get; set; }
     public bool IsRevert { get; set; }
 

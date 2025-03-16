@@ -7,6 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using FinalLab.Domain.Entities.Events.UpdateEvents;
 using FinalLab.Domain.Events.DomainEvents;
+using FinalLab.Infrastructure.Mappers;
+using FinalLab.Persistence.Repositories;
+
+
+// THis file needs to be updated with repos
+
 
 namespace FinalLab.Application.EventHandlers
 {
@@ -14,18 +20,21 @@ namespace FinalLab.Application.EventHandlers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<AccountModifiedEventHandler> _logger;
+        private readonly IEventRepository _eventRepository;
+        private readonly IAccountRepository _accountRepository;
 
-        public AccountModifiedEventHandler(ApplicationDbContext context, ILogger<AccountModifiedEventHandler> logger)
+        public AccountModifiedEventHandler(ApplicationDbContext context, ILogger<AccountModifiedEventHandler> logger, IAccountRepository accountRepository, IEventRepository eventRepository)
         {
             _context = context;
             _logger = logger;
+            _accountRepository = accountRepository;
+            _eventRepository = eventRepository;
         }
 
         public async Task Handle(AccountModifiedEvent notification, CancellationToken cancellationToken)
         {
-            AccountUpdateEvent obj = new AccountUpdateEvent();
-            obj.AccountId = notification.AccountId;
-            _context.UpdateEvents.AddAsync(obj, cancellationToken);
+            AccountUpdateEvent LoggingEvent = DomainEventMapper.Map(notification);
+        
             var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == notification.AccountId, cancellationToken);
 
             if (account == null)
@@ -46,7 +55,7 @@ namespace FinalLab.Application.EventHandlers
                 _logger.LogInformation("Account modified: AccountId = {AccountId}, New Status = {NewStatus}",
                     notification.AccountId, notification.NewStatus);
             }
-
+            await _eventRepository.AddAsync(LoggingEvent);
             await _context.SaveChangesAsync(cancellationToken);
         }
     }

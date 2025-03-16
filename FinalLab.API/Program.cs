@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using FinalLab.API.Middleware;
 using FinalLab.Application.EventHandlers;
+using FinalLab.Application.Querries;
 using FinalLab.Application.Services;
 using FinalLab.Domain.Entities;
 using FinalLab.Domain.Events;
@@ -63,12 +64,14 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
 
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(TransactionCreatedEventHandler).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddMediatR(cfg => 
+    cfg.RegisterServicesFromAssembly(typeof(CreateTransactionHandler).Assembly));
 
 
 builder.Services.AddScoped<INotificationHandler<TransactionCreatedEvent>, TransactionCreatedEventHandler>();
