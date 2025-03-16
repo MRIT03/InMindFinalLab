@@ -4,6 +4,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FinalLab.API.Dtos;
+using FinalLab.Domain.Events.DomainEvents;
 
 namespace FinalLab.API.Controllers
 {
@@ -36,6 +38,23 @@ namespace FinalLab.API.Controllers
         {
             var summaries = await _mediator.Send(new GetBalanceSummaryQuery());
             return Ok(summaries.FirstOrDefault( s => s.AccountId == userId));
+        }
+
+        [HttpPost("transfer")]
+        public async Task<IActionResult> transfer([FromBody] EventRequestDto request)
+        {
+            try
+            {
+                INotification eventToDispatch = new AccountModifiedEvent(request.AccountId, request.OldStatus,
+                    request.NewStatus, request.isReverted);
+                await _mediator.Publish(eventToDispatch);
+                return Ok(new { Message = $"{request.EventType} event dispatched successfully." });
+            }
+            catch
+            {
+                return BadRequest(new { Message = "An error occured while processing your request." });
+            }
+
         }
     }
 }
