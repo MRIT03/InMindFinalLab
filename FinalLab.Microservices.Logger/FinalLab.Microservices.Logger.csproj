@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="FinalLabTask3\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="FinalLabTask3\appsettings.json" />
+      <_ContentIncludedByDefault Remove="FinalLabTask3\bin\Debug\net8.0\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="FinalLabTask3\bin\Debug\net8.0\appsettings.json" />
+      <_ContentIncludedByDefault Remove="FinalLabTask3\bin\Debug\net8.0\FinalLabTask3.deps.json" />
+      <_ContentIncludedByDefault Remove="FinalLabTask3\bin\Debug\net8.0\FinalLabTask3.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="FinalLabTask3\obj\Debug\net8.0\staticwebassets.build.json" />
+      <_ContentIncludedByDefault Remove="FinalLabTask3\obj\FinalLabTask3.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="FinalLabTask3\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="FinalLabTask3\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="FinalLabTask3\Properties\launchSettings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Arch.EntityFrameworkCore.Design" Version="2.1.15" />
+
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
+
+        <PackageReference Include="RabbitMQ.Client" Version="7.1.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+    </ItemGroup>
+
+</Project>
