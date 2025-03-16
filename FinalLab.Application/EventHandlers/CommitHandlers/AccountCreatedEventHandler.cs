@@ -38,23 +38,24 @@ namespace FinalLab.Application.EventHandlers
             
             if (notification.IsReverting)
             {
-                var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == notification.AccountId, cancellationToken);
+                var Accounts = await _accountRepository.GetAllAsync();
+                var account = Accounts.FirstOrDefault(a => a.AccountId == notification.AccountId);
                 if (account != null)
                 {
-                    _context.Accounts.Remove(account);
-                    await _context.SaveChangesAsync(cancellationToken);
-                    _logger.LogWarning("Account creation REVERTED: AccountId = {AccountId}", notification.AccountId);
+                    _accountRepository.DeleteAsync(account);
+                    await _accountRepository.SaveAsync();
+                    _logger.LogWarning("Account creation REVERTED: FromAccountId = {FromAccountId}", notification.AccountId);
                 }
                 else
                 {
-                    _logger.LogWarning("Account deletion FAILED: AccountId = {AccountId}. No user with such Id", notification.AccountId);
+                    _logger.LogWarning("Account deletion FAILED: FromAccountId = {FromAccountId}. No user with such Id", notification.AccountId);
                 }
             }
             else
             {
                 Account acc = new Account();
                 await _accountRepository.AddAsync(acc);
-                _logger.LogInformation("New account created: AccountId = {AccountId}", acc.AccountId);
+                _logger.LogInformation("New account created: FromAccountId = {FromAccountId}", acc.AccountId);
             }
             await _eventRepository.AddAsync(LoggingEvent);
             await _context.SaveChangesAsync(cancellationToken);

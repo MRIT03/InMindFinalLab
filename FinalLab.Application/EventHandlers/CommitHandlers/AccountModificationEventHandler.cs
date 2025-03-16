@@ -9,6 +9,7 @@ using FinalLab.Domain.Entities.Events.UpdateEvents;
 using FinalLab.Domain.Events.DomainEvents;
 using FinalLab.Infrastructure.Mappers;
 using FinalLab.Persistence.Repositories;
+using FinalLab.Persistence.UnitsOfWork;
 
 
 // THis file needs to be updated with repos
@@ -34,25 +35,31 @@ namespace FinalLab.Application.EventHandlers
         public async Task Handle(AccountModifiedEvent notification, CancellationToken cancellationToken)
         {
             AccountUpdateEvent LoggingEvent = DomainEventMapper.Map(notification);
-        
-            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == notification.AccountId, cancellationToken);
 
+            var uow = new ChangeAccountStatus(_accountRepository)
+            {
+                NewStatus = notification.NewStatus,
+                AccountId = notification.AccountId,
+            };
+            var accounts = await _accountRepository.GetAllAsync();
+            var account = accounts.FirstOrDefault(a => a.AccountId == notification.AccountId);
             if (account == null)
             {
-                _logger.LogError("Account not found for modification: AccountId = {AccountId}", notification.AccountId);
+                _logger.LogError("Account not found for modification: FromAccountId = {FromAccountId}", notification.AccountId);
                 return;
             }
 
             if (notification.IsReverting)
             {
-                account.Status = notification.OldStatus;
-                _logger.LogWarning("Account modification REVERTED: AccountId = {AccountId}, Restored Status = {OldStatus}",
+                uow.NewStatus = notification.OldStatus;
+                await uow.commit();
+                _logger.LogWarning("Account modification REVERTED: FromAccountId = {FromAccountId}, Restored Status = {OldStatus}",
                     notification.AccountId, notification.OldStatus);
             }
             else
             {
-                account.Status = notification.NewStatus;
-                _logger.LogInformation("Account modified: AccountId = {AccountId}, New Status = {NewStatus}",
+                await uow.commit();
+                _logger.LogInformation("Account modified: FromAccountId = {FromAccountId}, New Status = {NewStatus}",
                     notification.AccountId, notification.NewStatus);
             }
             await _eventRepository.AddAsync(LoggingEvent);

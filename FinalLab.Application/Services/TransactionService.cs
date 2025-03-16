@@ -32,7 +32,7 @@ namespace FinalLab.Application.Services
             var result = await _mediator.Send(command);
             // Publish event after transaction creation
             await _mediator.Publish(new TransactionCreatedEvent(transaction.Id, transaction.AccountId, transaction.Amount, transaction.TransactionType));
-            _logger.LogInformation("Transaction event published: TransactionId={TransactionId}, AccountId={AccountId}, Amount={Amount}",
+            _logger.LogInformation("Transaction event published: TransactionId={TransactionId}, FromAccountId={FromAccountId}, Amount={Amount}",
                 transaction.Id, transaction.AccountId, transaction.Amount);
             return result;
         }

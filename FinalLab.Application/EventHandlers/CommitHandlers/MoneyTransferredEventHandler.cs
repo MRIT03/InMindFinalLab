@@ -12,6 +12,7 @@ using FinalLab.Domain.Entities.Events.UpdateEvents;
 using FinalLab.Domain.Events.DomainEvents;
 using FinalLab.Infrastructure.Mappers;
 using FinalLab.Persistence.Repositories;
+using FinalLab.Persistence.UnitsOfWork;
 
 namespace FinalLab.Application.EventHandlers
 {
@@ -21,23 +22,24 @@ namespace FinalLab.Application.EventHandlers
         private readonly ILogger<MoneyTransferredEventHandler> _logger;
         private readonly IMediator _mediator;
         private readonly IEventRepository _eventRepository;
-        private readonly ITransactionService _transactionService;
-
-        public MoneyTransferredEventHandler(ApplicationDbContext context, ILogger<MoneyTransferredEventHandler> logger, IMediator mediator, IEventRepository eventRepository, ITransactionService transactionRepository)
+        private readonly ITransactionRepository _transactionRepository;
+        private readonly IAccountRepository _accountRepository;
+        public MoneyTransferredEventHandler(ApplicationDbContext context, ILogger<MoneyTransferredEventHandler> logger, IMediator mediator, IEventRepository eventRepository, ITransactionRepository transactionRepository, IAccountRepository accountRepository)
         {
             _context = context;
             _logger = logger;
             _mediator = mediator;
             _eventRepository = eventRepository;
-            _transactionService = transactionRepository;
+            _transactionRepository = transactionRepository;
+            _accountRepository = accountRepository;
         }
 
         public async Task Handle(MoneyTransferredEvent notification, CancellationToken cancellationToken)
         {
             TransactionUpdateEvent loggingEvent = DomainEventMapper.Map(notification);
-            
-            var sender = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == notification.FromAccountId, cancellationToken);
-            var receiver = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == notification.ToAccountId, cancellationToken);
+            var Accounts = await _accountRepository.GetAllAsync();
+            var sender = Accounts.FirstOrDefault(a => a.AccountId == notification.FromAccountId);
+            var receiver = Accounts.FirstOrDefault(a => a.AccountId == notification.ToAccountId);
 
             if (sender == null || receiver == null)
             {
@@ -47,8 +49,14 @@ namespace FinalLab.Application.EventHandlers
 
             if (notification.IsReverting)
             {
-                receiver.Balance -= notification.Amount;
-                sender.Balance += notification.Amount;
+                IUnitOfWork transfer = new TransferFunds(
+                    _accountRepository,
+                    _transactionRepository,
+                    toAccountId: notification.FromAccountId,  // Destination: switched
+                    amount: notification.Amount,
+                    fromAccountId: notification.ToAccountId     // Source: switched
+                );
+                await transfer.commit();
                 
                 var transactionReverted = new CreateTransactionCommand()
                 {
@@ -71,8 +79,14 @@ namespace FinalLab.Application.EventHandlers
                     return;
                 }
 
-                sender.Balance -= notification.Amount;
-                receiver.Balance += notification.Amount;
+                IUnitOfWork transfer = new TransferFunds(
+                    _accountRepository,
+                    _transactionRepository,
+                    toAccountId: notification.ToAccountId,  
+                    amount: notification.Amount,
+                    fromAccountId: notification.FromAccountId    
+                );
+                await transfer.commit();
 
                 var transactionSuccessful = new CreateTransactionCommand()
                 {
