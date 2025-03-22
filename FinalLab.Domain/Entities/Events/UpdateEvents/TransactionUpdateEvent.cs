@@ -3,5 +3,5 @@
 public class TransactionUpdateEvent : UpdateEvent
 {
     public long TransactionId { get; set; }
-    
+    public string TransactionType { get; set; }
 }

@@ -29,7 +29,6 @@ namespace FinalLab.Tests
 
         public NotificationTests()
         {
-            // Create a unique in-memory database for each test run.
             _options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
