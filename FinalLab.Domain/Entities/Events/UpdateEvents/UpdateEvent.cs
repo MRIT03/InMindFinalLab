@@ -12,6 +12,7 @@ public class UpdateEvent
     public decimal? NewBalance { get; set; }
     public DateTime Timestamp { get; set; }
     public bool IsRevert { get; set; }
+    public bool Read { get; set; }
 
     // I will implement a recursive relationship between the events
     // This is for reverting events
