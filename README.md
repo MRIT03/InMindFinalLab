@@ -45,7 +45,7 @@ The reverting (rollback) mechanism in FinalLab uses two key concepts:
 
 ## Requirements
 
-- [.NET Core](https://dotnet.microsoft.com/download) (or .NET 5/6+)
+- [.NET Core](https://dotnet.microsoft.com/download) (or .NET 8)
 - [xUnit](https://xunit.net/)
 - [Moq](https://github.com/moq/moq4)
 - [Microsoft.EntityFrameworkCore.InMemory](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.InMemory)
